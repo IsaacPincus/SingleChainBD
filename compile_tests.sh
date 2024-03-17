@@ -1,5 +1,5 @@
 #!/bin/bash
-#Scripts to compile the code, because Makefiles are stupid
+#Scripts to compile the code, because Makefiles are difficult
 
 ## M3Massive parameters as of Feb 13 2020 ##
 FC90=mpif90
@@ -22,7 +22,7 @@ Net2="-lnetcdf"
 #SYSLIBS = -L/usr/local/netcdf/4.4.1.1/lib -llapack -lblas -lm
 
 ## Local parameters as of Jun 17 2020 ##
-FC90="mpifort"
+FC90="mpif90"
 INCLUDES="-L/usr/lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/x86_64-linux-gnu/hdf5/serial -I/usr/include -lhdf5"
 FFLAGS="${db} ${OPT} ${INCLUDES} ${Net2} ${Net1}"
 #FC90FLAGS= $(FFLAGS)
@@ -32,7 +32,7 @@ SYSLIBS="-L/usr/lib -llapack -lblas -lm"
 FILELIST="modules.f90 DataOutput.f90 utils.f90 properties.f90 gsipc.f90 InitialPos.f90 fruit.f90 tests.f90"
 
 #actually compile the thing
-run="mpifort -o tests ${FILELIST} ${FFLAGS} ${SYSLIBS}"
+run="${FC90} -o tests ${FILELIST} ${FFLAGS} ${SYSLIBS}"
 echo $run
 $run
 

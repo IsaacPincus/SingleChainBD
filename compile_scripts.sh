@@ -1,5 +1,5 @@
 #!/bin/bash
-#Scripts to compile the code, because Makefiles are stupid
+#Scripts to compile the code, because Makefiles are difficult
 
 ## M3Massive parameters as of Feb 13 2020 ##
 FC90=mpif90

@@ -14,13 +14,13 @@ SimulationNameSuffix = ""
 SPTypeDict = {"Hookean": 1, "FENE": 2, "InverseLangevin": 3,
               "Wormlike": 4, "Fraenkel": 5, "FENEFraenkel": 6,
               "WLC_bounded":7}
-SpringType = "FENEFraenkel"
+SpringType = "Hookean"
 # Options are SH, UA, PL, UR, PU, PP, EQ
 FTDict = {"Equilibrium no EV or HI": 0, "Planar Shear": 1, "Uniaxial Elongational": 2,
           "Planar Elongational": 3, "Uniaxial Extension Relaxation": 4,
           "Periodic Uniaxial Extension": 5, "Periodic Planar Extension": 6,
           "Equilibrium": 7, "BeadPulling": 8}
-FlowTypeInput = "Equilibrium"
+FlowTypeInput = "Planar Shear"
 BendTypeDict = {"NoBendingPotential": 0, "OneMinusCosTheta": 1}
 BendingTypeInput = "NoBendingPotential"
 BendingStiffness = 0
@@ -29,7 +29,7 @@ NaturalAngles = np.array([0])
 NaturalAngleScalarInput = 0
 ICDict = {"Random Spherical":1, "x-axis Aligned":2}
 InitialConfigurationOption = "Random Spherical"
-NumberOfBeads = 20
+NumberOfBeads = 10
 COMUpdateOn = True
 LookupTableOpt = False
 LookupTableTol = 0
@@ -41,7 +41,7 @@ BlockEnsemble = False
 NetCDF = True
 Restart = 0
 VarianceReduction = False
-NumberOfSamplesPerTrajectory = 500
+NumberOfSamplesPerTrajectory = 3
 phiFromFile = False
 phiFromSDK = False
 DelSCalcDict = {"Chebyshev": 0, "Cholesky": 1, "ExactSqrt": 2}
@@ -56,8 +56,8 @@ fdErrMax = 2.5e-3
 NumberOfTrajectoriesAlreadyCompleted = 0
 NumberOfTimestepWidths = 1
 NoProcessors = 24
-TotalTrajectories = 500
-RodlikeUnits = True
+TotalTrajectories = 5
+RodlikeUnits = False
 #mem in GB
 gbOfMemory=10
 #walltime in minutes
@@ -76,7 +76,7 @@ elif cluster=="Monarch":
     sensLocation = os.path.join(codeLocation, 'sens')
     modulesLocation = os.path.join(codeLocation, 'monarch_modules.sh')
 elif cluster=="Local":
-    codeLocation = "/home/isaacp/Documents/Single_chain/Code/Single-Chain-Development/"
+    codeLocation = "/home/ipincus/single_chain_code/SingleChainBD/"
     sensLocation = os.path.join(codeLocation, 'sens')
 
 # Parameters in Hookean units
@@ -100,7 +100,9 @@ contour_dist_for_EV = 1
 
 dtEquilibration = np.array([0.01])
 dtProduction = np.array([0.01])
-#tolerance = np.array([0.00001])
+tolerance = np.array([0.00001])
+
+Wi_vals = [0.1]
 
 # Parameters in Rodike Units, comment out if not needed
 if RodlikeUnits:
@@ -170,8 +172,7 @@ for item, Wi in enumerate(Wi_vals):
 
     os.chdir(WiDir)
     shutil.copy2(sensLocation,os.path.join(WiDir, 'sens'))
-	shutil.copy2(os.path.join(codeLocation, '/Matlab_scripts/Calculate_averages_from_trajectories.m'),
-				os.path.join(WiDir, 'sens'))
+    #shutil.copy2(os.path.join(codeLocation, 'Matlab_scripts/Calculate_averages_from_trajectories.m'),os.path.join(WiDir, 'sens'))
     if cluster=="Gadi":
         shutil.copy2(modulesLocation,os.path.join(WiDir, 'gadi_modules.sh'))
     elif cluster=="Massive":
@@ -187,7 +188,7 @@ for item, Wi in enumerate(Wi_vals):
         VarianceReduction=False
 
     gen.create_subfile(SimulationNamePrefix+
-                   'H'+str(H)+'dQ'+str(s)+WiString+
+                   WiString+
                    SimulationNameSuffix,
                    minsWalltime,
                    gbOfMemory,

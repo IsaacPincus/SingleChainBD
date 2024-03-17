@@ -2854,7 +2854,7 @@ Program tests
    call unit_tests_run
    !call regression_tests_run
    ! Validation tests can take hours to run - submit as a job!
-   call validation_tests_run
+   ! call validation_tests_run
    call fruit_summary
    call fruit_finalize
 

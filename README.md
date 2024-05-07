@@ -11,13 +11,18 @@ sudo apt-get install build-essential
 sudo apt-get install libhdf5-serial-dev
 ```
 
+Depending on how your system is set up, you may also need to install lapack and blas libraries, for example:
+```
+sudo apt-get install libblas-dev liblapack-dev
+```
+
 You can compile and run the test cases with:
 ```
 Source compile_tests.sh
 ./tests
 ```
 
-There may be one failure, which is related to an experimental feature and can be ignored.
+There may be one failure, which is related to an experimental feature and can be ignored. You may also have to run compile_tests.sh twice, to first generate the required module files.
 
 Using:
 ```
